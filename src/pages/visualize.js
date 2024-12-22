@@ -13,7 +13,8 @@ export default function Visualize() {
     async function fetchData() {
       setMsg('Loading graph data...');
       try {
-        const r = await fetch('https://crisil.onrender.com');
+        // fetch from the /preprocess route (not root "/")
+        const r = await fetch('https://crisil.onrender.com/preprocess');
         const d = await r.json();
         if (!r.ok) {
           setMsg('Error: ' + (d.error || 'unknown'));
@@ -39,14 +40,15 @@ export default function Visualize() {
     const simulation = d3.forceSimulation(gData.nodes)
       .force('link', d3.forceLink(gData.links).id(d => d.id).distance(80))
       .force('charge', d3.forceManyBody().strength(-30))
-      .force('center', d3.forceCenter(width/2, height/2));
+      .force('center', d3.forceCenter(width / 2, height / 2));
 
     const link = svg.append('g')
       .attr('stroke', '#999')
       .attr('stroke-opacity', 0.6)
       .selectAll('line')
       .data(gData.links)
-      .enter().append('line')
+      .enter()
+      .append('line')
       .attr('stroke-width', d => Math.sqrt(d.value));
 
     const node = svg.append('g')
@@ -54,7 +56,8 @@ export default function Visualize() {
       .attr('stroke-width', 1.5)
       .selectAll('circle')
       .data(gData.nodes)
-      .enter().append('circle')
+      .enter()
+      .append('circle')
       .attr('r', 5)
       .attr('fill', '#69b3a2')
       .call(d3.drag()
@@ -66,7 +69,8 @@ export default function Visualize() {
     const label = svg.append('g')
       .selectAll('text')
       .data(gData.nodes)
-      .enter().append('text')
+      .enter()
+      .append('text')
       .text(d => d.id)
       .attr('fill', '#ccc')
       .attr('font-size', 10)
@@ -91,14 +95,17 @@ export default function Visualize() {
 
     function dragStart(event, d) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
-      d.fx = d.x; d.fy = d.y;
+      d.fx = d.x;
+      d.fy = d.y;
     }
     function dragged(event, d) {
-      d.fx = event.x; d.fy = event.y;
+      d.fx = event.x;
+      d.fy = event.y;
     }
     function dragEnd(event, d) {
       if (!event.active) simulation.alphaTarget(0);
-      d.fx = null; d.fy = null;
+      d.fx = null;
+      d.fy = null;
     }
 
   }, [gData]);
@@ -108,7 +115,7 @@ export default function Visualize() {
       <h1>Co-occurrence Network</h1>
       <p style={{ color: 'yellow' }}>{msg}</p>
       <svg ref={sRef}></svg>
-      <br/>
+      <br />
       <button onClick={() => rt.push('/preprocess')}>Back to Preprocessed</button>{' '}
       <button onClick={() => rt.push('/')}>Home</button>
     </div>

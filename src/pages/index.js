@@ -95,7 +95,6 @@ export default function Home() {
       <button onClick={() => ro.push('/visualize')} style={{ marginLeft: 10 }}>Visualize Graph</button>
 
       <p style={{ color: 'yellow' }}>{m}</p>
-
       {r && <ModelComparison results={r} />}
     </div>
   );

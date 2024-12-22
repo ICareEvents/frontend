@@ -6,16 +6,18 @@ export default function Preprocess() {
   const [freq, setFreq] = useState([]);
   const [msg, setMsg] = useState('');
   const rt = useRouter();
+
   useEffect(() => {
     async function fetchData() {
       setMsg('Loading...');
       try {
-        const r = await fetch('https://crisil.onrender.com');
+        // CHANGE: fetch from the /preprocess route
+        const r = await fetch('https://crisil.onrender.com/preprocess');
         const d = await r.json();
         if (!r.ok) {
           setMsg('Error: ' + (d.error || 'unknown'));
         } else {
-          setFreq(d.frequency);
+          setFreq(d.frequency || []);
           setMsg('');
         }
       } catch (err) {

@@ -6,7 +6,6 @@ export default function Preprocess() {
   const [freq, setFreq] = useState([]);
   const [msg, setMsg] = useState('');
   const rt = useRouter();
-
   useEffect(() => {
     async function fetchData() {
       setMsg('Loading...');

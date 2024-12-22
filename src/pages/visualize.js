@@ -13,7 +13,7 @@ export default function Visualize() {
     async function fetchData() {
       setMsg('Loading graph data...');
       try {
-        const r = await fetch('http://127.0.0.1:5000');
+        const r = await fetch('https://crisil.onrender.com');
         const d = await r.json();
         if (!r.ok) {
           setMsg('Error: ' + (d.error || 'unknown'));

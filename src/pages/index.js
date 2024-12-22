@@ -53,26 +53,25 @@ export default function Home() {
   }
 };
   // 4) run advanced pipeline
-  const hAdv = async () => {
-    sM('Running advanced pipeline on Flask...');
-    try {
-      const resp = await fetch('https://crisil.onrender.com', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({})
-      });
-      const d = await resp.json();
-      if (!resp.ok) {
-        sM('Error: ' + (d.error || 'unknown'));
-      } else {
-        sR(d.results);
-        sM(`Done in ${d.elapsed} seconds.`);
-      }
-    } catch (err) {
-      sM('Error: ' + err.message);
+const hAdv = async () => {
+  sM('Running advanced pipeline on Flask...');
+  try {
+    const resp = await fetch('https://crisil.onrender.com/run_advanced_model', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
+    });
+    const d = await resp.json();
+    if (!resp.ok) {
+      sM('Error: ' + (d.error || 'unknown'));
+    } else {
+      sR(d.results);
+      sM(`Done in ${d.elapsed} seconds.`);
     }
-  };
-
+  } catch (err) {
+    sM('Error: ' + err.message);
+  }
+};
   return (
     <div style={{ backgroundColor: '#000', color: '#fff', minHeight: '100vh', padding: 20, fontFamily: 'Arial' }}>
       <h1>Advanced Topic Modeling Tool</h1>

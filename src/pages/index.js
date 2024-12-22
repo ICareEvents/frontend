@@ -31,47 +31,49 @@ export default function Home() {
 
   // 3) upload text to Flask
   const hUT = async () => {
-  if (!t.trim()) {
-    sM('No text in memory. Please load file first.');
-    return;
-  }
-  sM('Uploading text to Flask...');
-  try {
-    const resp = await fetch('https://crisil.onrender.com/upload_text', { // Use the correct URL
-      method: 'POST', // Ensure it's POST
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: t }), // Send the text data
-    });
-    const d = await resp.json();
-    if (!resp.ok) {
-      sM('Error: ' + (d.error || 'unknown'));
-    } else {
-      sM('Uploaded to Flask successfully!');
+    if (!t.trim()) {
+      sM('No text in memory. Please load file first.');
+      return;
     }
-  } catch (err) {
-    sM('Error: ' + err.message);
-  }
-};
+    sM('Uploading text to Flask...');
+    try {
+      const resp = await fetch('https://crisil.onrender.com/upload_text', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: t }),
+      });
+      const d = await resp.json();
+      if (!resp.ok) {
+        sM('Error: ' + (d.error || 'unknown'));
+      } else {
+        sM('Uploaded to Flask successfully!');
+      }
+    } catch (err) {
+      sM('Error: ' + err.message);
+    }
+  };
+
   // 4) run advanced pipeline
-const hAdv = async () => {
-  sM('Running advanced pipeline on Flask...');
-  try {
-    const resp = await fetch('https://crisil.onrender.com/run_advanced_model', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({})
-    });
-    const d = await resp.json();
-    if (!resp.ok) {
-      sM('Error: ' + (d.error || 'unknown'));
-    } else {
-      sR(d.results);
-      sM(`Done in ${d.elapsed} seconds.`);
+  const hAdv = async () => {
+    sM('Running advanced pipeline on Flask...');
+    try {
+      const resp = await fetch('https://crisil.onrender.com/run_advanced_model', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+      });
+      const d = await resp.json();
+      if (!resp.ok) {
+        sM('Error: ' + (d.error || 'unknown'));
+      } else {
+        sR(d.results);
+        sM(`Done in ${d.elapsed} seconds.`);
+      }
+    } catch (err) {
+      sM('Error: ' + err.message);
     }
-  } catch (err) {
-    sM('Error: ' + err.message);
-  }
-};
+  };
+
   return (
     <div style={{ backgroundColor: '#000', color: '#fff', minHeight: '100vh', padding: 20, fontFamily: 'Arial' }}>
       <h1>Advanced Topic Modeling Tool</h1>

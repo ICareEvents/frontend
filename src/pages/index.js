@@ -38,7 +38,7 @@ export default function Home() {
     sM('Uploading text to Flask...');
     try {
       // Replace URL with your real Flask endpoint
-      const resp = await fetch('https://crisil.onrender.com', {
+      const resp = await fetch('https://crisil.onrender.com/upload_text', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: t })

@@ -31,29 +31,27 @@ export default function Home() {
 
   // 3) upload text to Flask
   const hUT = async () => {
-    if (!t.trim()) {
-      sM('No text in memory. Please load file first.');
-      return;
+  if (!t.trim()) {
+    sM('No text in memory. Please load file first.');
+    return;
+  }
+  sM('Uploading text to Flask...');
+  try {
+    const resp = await fetch('https://crisil.onrender.com/upload_text', { // Use the correct URL
+      method: 'POST', // Ensure it's POST
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: t }), // Send the text data
+    });
+    const d = await resp.json();
+    if (!resp.ok) {
+      sM('Error: ' + (d.error || 'unknown'));
+    } else {
+      sM('Uploaded to Flask successfully!');
     }
-    sM('Uploading text to Flask...');
-    try {
-      // Replace URL with your real Flask endpoint
-      const resp = await fetch('https://crisil.onrender.com/upload_text', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: t })
-      });
-      const d = await resp.json();
-      if (!resp.ok) {
-        sM('Error: ' + (d.error || 'unknown'));
-      } else {
-        sM('Uploaded to Flask successfully!');
-      }
-    } catch (err) {
-      sM('Error: ' + err.message);
-    }
-  };
-
+  } catch (err) {
+    sM('Error: ' + err.message);
+  }
+};
   // 4) run advanced pipeline
   const hAdv = async () => {
     sM('Running advanced pipeline on Flask...');

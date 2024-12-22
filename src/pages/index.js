@@ -38,7 +38,7 @@ export default function Home() {
     sM('Uploading text to Flask...');
     try {
       // Replace URL with your real Flask endpoint
-      const resp = await fetch('http://127.0.0.1:5000', {
+      const resp = await fetch('https://crisil.onrender.com', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: t })
@@ -58,7 +58,7 @@ export default function Home() {
   const hAdv = async () => {
     sM('Running advanced pipeline on Flask...');
     try {
-      const resp = await fetch('http://127.0.0.1:5000', {
+      const resp = await fetch('https://crisil.onrender.com', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({})

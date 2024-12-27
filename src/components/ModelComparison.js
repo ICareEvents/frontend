@@ -1,4 +1,3 @@
-// File: components/ModelComparison.js
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
@@ -16,28 +15,29 @@ export default function ModelComparison({ results }) {
       .attr('width', w)
       .attr('height', h)
       .style('background', '#333');
-
+    
+    // Clear old content
     svg.selectAll('*').remove();
 
-    // x => coherence
+    // X => coherence
     const xExt = d3.extent(data, d => d.coherence);
     const xScale = d3.scaleLinear()
       .domain([Math.min(xExt[0], 0.35), Math.max(xExt[1], 0.55)])
       .range([m.left, w - m.right]);
 
-    // y => time
+    // Y => time
     const yExt = d3.extent(data, d => d.time_sec);
     const yScale = d3.scaleLinear()
       .domain([0, (yExt[1] || 100) * 1.2])
       .range([h - m.bottom, m.top]);
 
-    // r => topic_diversity
+    // R => topic_diversity
     const rExt = d3.extent(data, d => d.topic_diversity);
     const rScale = d3.scaleSqrt()
       .domain(rExt)
       .range([5, 40]);
 
-    // axes
+    // Axes
     const xAxis = d3.axisBottom(xScale).ticks(5);
     const yAxis = d3.axisLeft(yScale).ticks(5);
 
@@ -51,9 +51,9 @@ export default function ModelComparison({ results }) {
       .call(yAxis)
       .attr('color', 'white');
 
-    // labels
+    // Axis labels
     svg.append('text')
-      .attr('x', w/2)
+      .attr('x', w / 2)
       .attr('y', h - 5)
       .attr('fill', 'white')
       .attr('text-anchor', 'middle')
@@ -61,13 +61,13 @@ export default function ModelComparison({ results }) {
 
     svg.append('text')
       .attr('transform', 'rotate(-90)')
-      .attr('x', -h/2)
+      .attr('x', -h / 2)
       .attr('y', 15)
       .attr('fill', 'white')
       .attr('text-anchor', 'middle')
       .text('Time (sec)');
 
-    // circles
+    // Circles
     svg.selectAll('circle')
       .data(data)
       .enter().append('circle')
@@ -77,7 +77,7 @@ export default function ModelComparison({ results }) {
       .attr('fill', (d, i) => d3.schemeSet2[i % 8])
       .attr('fill-opacity', 0.8);
 
-    // model labels
+    // Labels for each circle
     svg.selectAll('.lbl')
       .data(data)
       .enter().append('text')
@@ -88,7 +88,6 @@ export default function ModelComparison({ results }) {
       .attr('fill', 'white')
       .attr('font-size', 10)
       .text(d => d.model);
-
   }, [results]);
 
   if (!results?.models) return null;
@@ -173,7 +172,8 @@ export default function ModelComparison({ results }) {
           <div style={{ border: '2px solid #fff', padding: 10 }}>c-TF-IDF</div>
         </div>
         <p style={{ color: 'white', maxWidth: 400 }}>
-          This shows how we embed documents with BERT, reduce with UMAP, cluster with HDBSCAN, and extract class-specific words using c-TF-IDF.
+          This shows how we embed documents with BERT, reduce with UMAP, cluster with HDBSCAN,
+          and extract class-specific words using c-TF-IDF.
         </p>
       </div>
     </div>

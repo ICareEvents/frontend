@@ -1,4 +1,3 @@
-// File: pages/preprocess.js
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
@@ -11,7 +10,9 @@ export default function Preprocess() {
     async function fetchData() {
       setMsg('Loading...');
       try {
-        // CHANGE: fetch from the /preprocess route
+        // IMPORTANT: Change to your backend endpoint:
+        // for local dev: 'http://127.0.0.1:5000/preprocess'
+        // for your deployed server: 'https://crisil.onrender.com/preprocess'
         const r = await fetch('https://crisil.onrender.com/preprocess');
         const d = await r.json();
         if (!r.ok) {

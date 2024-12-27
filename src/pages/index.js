@@ -82,7 +82,7 @@ export default function Home() {
   return (
     <div style={{ backgroundColor: '#000', color: '#fff', minHeight: '100vh', padding: 20, fontFamily: 'Arial' }}>
       <h1>Advanced Topic Modeling Tool</h1>
-      <h3>Author: Kumari Ankita</h3>
+      <h3>Author: **********</h3>
       <p>
         1) Select your .txt file. <br/>
         2) "Load File" to read into memory. <br/>

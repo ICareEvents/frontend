@@ -1,11 +1,10 @@
-// File: pages/index.js
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import ModelComparison from '../components/ModelComparison';
 
 export default function Home() {
-  const [f, sF] = useState(null);  // file
-  const [t, sT] = useState('');    // text
+  const [f, sF] = useState(null);  // file object
+  const [t, sT] = useState('');    // file text content
   const [r, sR] = useState(null);  // results from advanced pipeline
   const [m, sM] = useState('');    // message
   const ro = useRouter();
@@ -37,6 +36,9 @@ export default function Home() {
     }
     sM('Uploading text to Flask...');
     try {
+      // IMPORTANT: Change to your backend endpoint:
+      // for local dev: 'http://127.0.0.1:5000/upload_text'
+      // for your deployed server: 'https://crisil.onrender.com/upload_text'
       const resp = await fetch('https://crisil.onrender.com/upload_text', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -57,6 +59,9 @@ export default function Home() {
   const hAdv = async () => {
     sM('Running advanced pipeline on Flask...');
     try {
+      // IMPORTANT: Change to your backend endpoint:
+      // for local dev: 'http://127.0.0.1:5000/run_advanced_model'
+      // for your deployed server: 'https://crisil.onrender.com/run_advanced_model'
       const resp = await fetch('https://crisil.onrender.com/run_advanced_model', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

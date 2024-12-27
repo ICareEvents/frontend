@@ -18,8 +18,7 @@ export default function Home() {
   const hLF = () => {
     if (!f) {
       sM('No file selected.');
-      return;
-    }
+      return;}
     const reader = new FileReader();
     reader.onload = (ev) => {
       sT(ev.target.result);

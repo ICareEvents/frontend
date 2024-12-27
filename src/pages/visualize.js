@@ -1,4 +1,3 @@
-// File: pages/visualize.js
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import * as d3 from 'd3';
@@ -9,15 +8,20 @@ export default function Visualize() {
   const sRef = useRef(null);
   const rt = useRouter();
 
+  // Fetch the graph data from our /preprocess endpoint
   useEffect(() => {
     async function fetchData() {
       setMsg('Loading graph data...');
       try {
-        // fetch from the /preprocess route (not root "/")
+        // IMPORTANT: Change to your backend endpoint:
+        // for local dev: 'http://127.0.0.1:5000/preprocess'
+        // for your deployed server: 'https://crisil.onrender.com/preprocess'
         const r = await fetch('https://crisil.onrender.com/preprocess');
         const d = await r.json();
         if (!r.ok) {
           setMsg('Error: ' + (d.error || 'unknown'));
+        } else if (!d.graph) {
+          setMsg('Graph data not found in response.');
         } else {
           setGData(d.graph);
           setMsg('');
@@ -35,29 +39,30 @@ export default function Visualize() {
     const svg = d3.select(sRef.current);
     const width = 800, height = 600;
     svg.attr('width', width).attr('height', height).style('background', '#222');
-    svg.selectAll('*').remove();
+    svg.selectAll('*').remove(); // clear previous renders
 
+    // Force simulation
     const simulation = d3.forceSimulation(gData.nodes)
       .force('link', d3.forceLink(gData.links).id(d => d.id).distance(80))
       .force('charge', d3.forceManyBody().strength(-30))
       .force('center', d3.forceCenter(width / 2, height / 2));
 
+    // Links
     const link = svg.append('g')
       .attr('stroke', '#999')
       .attr('stroke-opacity', 0.6)
       .selectAll('line')
       .data(gData.links)
-      .enter()
-      .append('line')
+      .enter().append('line')
       .attr('stroke-width', d => Math.sqrt(d.value));
 
+    // Nodes
     const node = svg.append('g')
       .attr('stroke', '#fff')
       .attr('stroke-width', 1.5)
       .selectAll('circle')
       .data(gData.nodes)
-      .enter()
-      .append('circle')
+      .enter().append('circle')
       .attr('r', 5)
       .attr('fill', '#69b3a2')
       .call(d3.drag()
@@ -66,17 +71,18 @@ export default function Visualize() {
         .on('end', dragEnd)
       );
 
+    // Node labels
     const label = svg.append('g')
       .selectAll('text')
       .data(gData.nodes)
-      .enter()
-      .append('text')
+      .enter().append('text')
       .text(d => d.id)
       .attr('fill', '#ccc')
       .attr('font-size', 10)
       .attr('dx', 8)
       .attr('dy', '.35em');
 
+    // Update on each tick
     simulation.on('tick', () => {
       link
         .attr('x1', d => d.source.x)
@@ -95,16 +101,16 @@ export default function Visualize() {
 
     function dragStart(event, d) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
-      d.fx = d.x;
+      d.fx = d.x; 
       d.fy = d.y;
     }
     function dragged(event, d) {
-      d.fx = event.x;
+      d.fx = event.x; 
       d.fy = event.y;
     }
     function dragEnd(event, d) {
       if (!event.active) simulation.alphaTarget(0);
-      d.fx = null;
+      d.fx = null; 
       d.fy = null;
     }
 
@@ -115,7 +121,7 @@ export default function Visualize() {
       <h1>Co-occurrence Network</h1>
       <p style={{ color: 'yellow' }}>{msg}</p>
       <svg ref={sRef}></svg>
-      <br />
+      <br/>
       <button onClick={() => rt.push('/preprocess')}>Back to Preprocessed</button>{' '}
       <button onClick={() => rt.push('/')}>Home</button>
     </div>

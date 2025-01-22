@@ -10,13 +10,12 @@ export default function Preprocess() {
     async function fetchData() {
       setMsg('Loading...');
       try {
-        // Use your actual Flask endpoint
-        const r = await fetch('https://crisil.onrender.com/preprocess');
-        const d = await r.json();
-        if (!r.ok) {
-          setMsg('Error: ' + (d.error || 'unknown'));
+        const resp = await fetch('https://crisil.onrender.com/preprocess');
+        const data = await resp.json();
+        if (!resp.ok) {
+          setMsg('Error: ' + (data.error || 'unknown'));
         } else {
-          setFreq(d.frequency || []);
+          setFreq(data.frequency || []);
           setMsg('');
         }
       } catch (err) {
@@ -27,7 +26,7 @@ export default function Preprocess() {
   }, []);
 
   return (
-    <div style={{ backgroundColor: '#000', color: '#fff', minHeight: '100vh', padding: 20, fontFamily: 'Arial' }}>
+    <div style={{ backgroundColor: '#000', color: '#fff', minHeight: '100vh', padding: 20 }}>
       <h1>Preprocessed Data</h1>
       <p style={{ color: 'yellow' }}>{msg}</p>
       {freq.length > 0 && (
@@ -48,7 +47,7 @@ export default function Preprocess() {
           </tbody>
         </table>
       )}
-      <br/>
+      <br />
       <button onClick={() => rt.push('/')}>Home</button>{' '}
       <button onClick={() => rt.push('/visualize')}>Visualize Graph</button>
     </div>

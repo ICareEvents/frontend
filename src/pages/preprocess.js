@@ -10,9 +10,6 @@ export default function Preprocess() {
     async function fetchData() {
       setMsg('Loading...');
       try {
-        // IMPORTANT: Change to your backend endpoint:
-        // for local dev: 'http://127.0.0.1:5000/preprocess'
-        // for your deployed server: 'https://crisil.onrender.com/preprocess'
         const r = await fetch('https://crisil.onrender.com/preprocess');
         const d = await r.json();
         if (!r.ok) {

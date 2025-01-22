@@ -1,8 +1,6 @@
 import React from 'react';
 
 export default function ModelComparison({ analysis }) {
-  // The LLM can return structured JSON with keys:
-  // { topics, entities, sentiments, themes, directions, outlook, summary, generated_code, raw_response, ... }
   if (!analysis) return null;
 
   const {
@@ -18,18 +16,15 @@ export default function ModelComparison({ analysis }) {
   } = analysis;
 
   return (
-    <div style={{ marginTop: 20 }}>
-      <h3>LLM Extraction</h3>
+    <div>
       {!raw_response && (
-        <table style={{ borderCollapse: 'collapse', color: 'white' }}>
+        <table style={{ borderCollapse: 'collapse', color: 'white', marginBottom: 20 }}>
           <tbody>
             {topics && (
               <tr>
                 <td style={{ border: '1px solid #777', padding: 5 }}><strong>Topics</strong></td>
                 <td style={{ border: '1px solid #777', padding: 5 }}>
-                  {Array.isArray(topics)
-                    ? topics.join(', ')
-                    : JSON.stringify(topics)}
+                  {Array.isArray(topics) ? topics.join(', ') : JSON.stringify(topics)}
                 </td>
               </tr>
             )}
@@ -37,9 +32,7 @@ export default function ModelComparison({ analysis }) {
               <tr>
                 <td style={{ border: '1px solid #777', padding: 5 }}><strong>Entities</strong></td>
                 <td style={{ border: '1px solid #777', padding: 5 }}>
-                  {Array.isArray(entities)
-                    ? entities.join(', ')
-                    : JSON.stringify(entities)}
+                  {Array.isArray(entities) ? entities.join(', ') : JSON.stringify(entities)}
                 </td>
               </tr>
             )}
@@ -55,9 +48,7 @@ export default function ModelComparison({ analysis }) {
               <tr>
                 <td style={{ border: '1px solid #777', padding: 5 }}><strong>Themes</strong></td>
                 <td style={{ border: '1px solid #777', padding: 5 }}>
-                  {Array.isArray(themes)
-                    ? themes.join(', ')
-                    : JSON.stringify(themes)}
+                  {Array.isArray(themes) ? themes.join(', ') : JSON.stringify(themes)}
                 </td>
               </tr>
             )}
@@ -89,7 +80,7 @@ export default function ModelComparison({ analysis }) {
               <tr>
                 <td style={{ border: '1px solid #777', padding: 5 }}><strong>Generated Code</strong></td>
                 <td style={{ border: '1px solid #777', padding: 5 }}>
-                  <pre style={{ background: '#333', padding: 10 }}>
+                  <pre style={{ background: '#333', padding: 10, whiteSpace: 'pre-wrap' }}>
                     {generated_code}
                   </pre>
                 </td>
@@ -100,9 +91,9 @@ export default function ModelComparison({ analysis }) {
       )}
 
       {raw_response && (
-        <div style={{ marginTop: 20 }}>
-          <h4>Raw Response</h4>
-          <pre style={{ backgroundColor: '#333', padding: 10, whiteSpace: 'pre-wrap', color: '#fff' }}>
+        <div>
+          <h4>Raw LLM Response</h4>
+          <pre style={{ backgroundColor: '#333', padding: 10, color: '#fff', whiteSpace: 'pre-wrap' }}>
             {raw_response}
           </pre>
         </div>

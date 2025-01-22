@@ -36,8 +36,7 @@ export default function Home() {
     }
     sM('Uploading text to Flask...');
     try {
-      // IMPORTANT: Change to your backend endpoint for local or deployed server
-      const resp = await fetch('http://127.0.0.1:5000/upload_text', {
+      const resp = await fetch('https://crisil.onrender.com/upload_text', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: t }),
@@ -57,8 +56,7 @@ export default function Home() {
   const hAdv = async () => {
     sM('Running advanced pipeline on Flask...');
     try {
-      // IMPORTANT: Change to your backend endpoint for local or deployed server
-      const resp = await fetch('http://127.0.0.1:5000/run_advanced_model', {
+      const resp = await fetch('https://crisil.onrender.com/run_advanced_model', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({})
@@ -67,7 +65,6 @@ export default function Home() {
       if (!resp.ok) {
         sM('Error: ' + (d.error || 'unknown'));
       } else {
-        // The new backend returns { elapsed: number, analysis: {...} }
         sR(d.analysis); 
         sM(`Done in ${d.elapsed} seconds.`);
       }

@@ -10,6 +10,7 @@ export default function Preprocess() {
     async function fetchData() {
       setMsg('Loading...');
       try {
+        // Use your actual Flask endpoint
         const r = await fetch('https://crisil.onrender.com/preprocess');
         const d = await r.json();
         if (!r.ok) {

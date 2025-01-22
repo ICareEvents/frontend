@@ -72,6 +72,33 @@ export default function Home() {
       sM('Error: ' + err.message);
     }
   };
+<button onClick={async ()=> {
+  const aRes = await fetch('https://crisil.onrender.com/download_analysis');
+  const blob = await aRes.blob();
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'analysis_output.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}}>
+  Download Analysis
+</button>
+
+<button onClick={async ()=> {
+  const cRes = await fetch('https://crisil.onrender.com/download_code');
+  const blob = await cRes.blob();
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'generated_code.py';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}}>
+  Download Code
+</button>
 
   return (
     <div style={{ backgroundColor: '#000', color: '#fff', minHeight: '100vh', padding: 20, fontFamily: 'Arial' }}>

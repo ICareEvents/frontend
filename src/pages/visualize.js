@@ -8,19 +8,18 @@ export default function Visualize() {
   const sRef = useRef(null);
   const rt = useRouter();
 
-  // Fetch the graph data from /preprocess
   useEffect(() => {
     async function fetchData() {
       setMsg('Loading graph data...');
       try {
-        const r = await fetch('https://crisil.onrender.com/preprocess');
-        const d = await r.json();
-        if (!r.ok) {
-          setMsg('Error: ' + (d.error || 'unknown'));
-        } else if (!d.graph) {
+        const resp = await fetch('https://crisil.onrender.com/preprocess');
+        const data = await resp.json();
+        if (!resp.ok) {
+          setMsg('Error: ' + (data.error || 'unknown'));
+        } else if (!data.graph) {
           setMsg('Graph data not found in response.');
         } else {
-          setGData(d.graph);
+          setGData(data.graph);
           setMsg('');
         }
       } catch (err) {
@@ -32,12 +31,11 @@ export default function Visualize() {
 
   useEffect(() => {
     if (!gData) return;
-
     const svg = d3.select(sRef.current);
     const width = 800;
     const height = 600;
     svg.attr('width', width).attr('height', height).style('background', '#222');
-    svg.selectAll('*').remove(); // clear previous renders
+    svg.selectAll('*').remove();
 
     const simulation = d3.forceSimulation(gData.nodes)
       .force('link', d3.forceLink(gData.links).id(d => d.id).distance(80))
@@ -77,19 +75,10 @@ export default function Visualize() {
       .attr('dy', '.35em');
 
     simulation.on('tick', () => {
-      link
-        .attr('x1', d => d.source.x)
-        .attr('y1', d => d.source.y)
-        .attr('x2', d => d.target.x)
-        .attr('y2', d => d.target.y);
-
-      node
-        .attr('cx', d => d.x)
-        .attr('cy', d => d.y);
-
-      label
-        .attr('x', d => d.x)
-        .attr('y', d => d.y);
+      link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+          .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+      node.attr('cx', d => d.x).attr('cy', d => d.y);
+      label.attr('x', d => d.x).attr('y', d => d.y);
     });
 
     function dragStart(event, d) {
@@ -110,11 +99,11 @@ export default function Visualize() {
   }, [gData]);
 
   return (
-    <div style={{ backgroundColor: '#000', color: '#fff', minHeight: '100vh', padding: 20, fontFamily: 'Arial' }}>
+    <div style={{ backgroundColor: '#000', color: '#fff', minHeight: '100vh', padding: 20 }}>
       <h1>Co-occurrence Network</h1>
       <p style={{ color: 'yellow' }}>{msg}</p>
       <svg ref={sRef}></svg>
-      <br/>
+      <br />
       <button onClick={() => rt.push('/preprocess')}>Back to Preprocessed</button>{' '}
       <button onClick={() => rt.push('/')}>Home</button>
     </div>

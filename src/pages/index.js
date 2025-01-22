@@ -5,7 +5,7 @@ import ModelComparison from '../components/ModelComparison';
 export default function Home() {
   const [f, sF] = useState(null);  // file object
   const [t, sT] = useState('');    // file text content
-  const [r, sR] = useState(null);  // results from advanced pipeline
+  const [r, sR] = useState(null);  // analysis from advanced pipeline
   const [m, sM] = useState('');    // message
   const ro = useRouter();
 
@@ -18,7 +18,8 @@ export default function Home() {
   const hLF = () => {
     if (!f) {
       sM('No file selected.');
-      return;}
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (ev) => {
       sT(ev.target.result);
@@ -35,10 +36,8 @@ export default function Home() {
     }
     sM('Uploading text to Flask...');
     try {
-      // IMPORTANT: Change to your backend endpoint:
-      // for local dev: 'http://127.0.0.1:5000/upload_text'
-      // for your deployed server: 'https://crisil.onrender.com/upload_text'
-      const resp = await fetch('https://crisil.onrender.com/upload_text', {
+      // IMPORTANT: Change to your backend endpoint for local or deployed server
+      const resp = await fetch('http://127.0.0.1:5000/upload_text', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: t }),
@@ -58,10 +57,8 @@ export default function Home() {
   const hAdv = async () => {
     sM('Running advanced pipeline on Flask...');
     try {
-      // IMPORTANT: Change to your backend endpoint:
-      // for local dev: 'http://127.0.0.1:5000/run_advanced_model'
-      // for your deployed server: 'https://crisil.onrender.com/run_advanced_model'
-      const resp = await fetch('https://crisil.onrender.com/run_advanced_model', {
+      // IMPORTANT: Change to your backend endpoint for local or deployed server
+      const resp = await fetch('http://127.0.0.1:5000/run_advanced_model', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({})
@@ -70,7 +67,8 @@ export default function Home() {
       if (!resp.ok) {
         sM('Error: ' + (d.error || 'unknown'));
       } else {
-        sR(d.results);
+        // The new backend returns { elapsed: number, analysis: {...} }
+        sR(d.analysis); 
         sM(`Done in ${d.elapsed} seconds.`);
       }
     } catch (err) {
@@ -86,7 +84,7 @@ export default function Home() {
         1) Select your .txt file. <br/>
         2) "Load File" to read into memory. <br/>
         3) "Upload to Flask" to send text to the backend. <br/>
-        4) "Run Advanced Analysis" to see model metrics + bubble chart. <br/>
+        4) "Run Advanced Analysis" to see the LLM-based extraction. <br/>
         5) Also see "Preprocessed Data" and "Visualize Graph" links below.
       </p>
 
@@ -100,7 +98,7 @@ export default function Home() {
       <button onClick={() => ro.push('/visualize')} style={{ marginLeft: 10 }}>Visualize Graph</button>
 
       <p style={{ color: 'yellow' }}>{m}</p>
-      {r && <ModelComparison results={r} />}
+      {r && <ModelComparison analysis={r} />}
     </div>
   );
 }

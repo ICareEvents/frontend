@@ -7,15 +7,10 @@ export default function Visualize() {
   const [msg, setMsg] = useState('');
   const sRef = useRef(null);
   const rt = useRouter();
-
-  // Fetch the graph data from our /preprocess endpoint
   useEffect(() => {
     async function fetchData() {
       setMsg('Loading graph data...');
       try {
-        // IMPORTANT: Change to your backend endpoint:
-        // for local dev: 'http://127.0.0.1:5000/preprocess'
-        // for your deployed server: 'https://crisil.onrender.com/preprocess'
         const r = await fetch('https://crisil.onrender.com/preprocess');
         const d = await r.json();
         if (!r.ok) {
@@ -39,15 +34,13 @@ export default function Visualize() {
     const svg = d3.select(sRef.current);
     const width = 800, height = 600;
     svg.attr('width', width).attr('height', height).style('background', '#222');
-    svg.selectAll('*').remove(); // clear previous renders
+    svg.selectAll('*').remove();
 
-    // Force simulation
     const simulation = d3.forceSimulation(gData.nodes)
       .force('link', d3.forceLink(gData.links).id(d => d.id).distance(80))
       .force('charge', d3.forceManyBody().strength(-30))
       .force('center', d3.forceCenter(width / 2, height / 2));
 
-    // Links
     const link = svg.append('g')
       .attr('stroke', '#999')
       .attr('stroke-opacity', 0.6)
@@ -56,7 +49,6 @@ export default function Visualize() {
       .enter().append('line')
       .attr('stroke-width', d => Math.sqrt(d.value));
 
-    // Nodes
     const node = svg.append('g')
       .attr('stroke', '#fff')
       .attr('stroke-width', 1.5)
@@ -71,7 +63,6 @@ export default function Visualize() {
         .on('end', dragEnd)
       );
 
-    // Node labels
     const label = svg.append('g')
       .selectAll('text')
       .data(gData.nodes)
@@ -82,7 +73,6 @@ export default function Visualize() {
       .attr('dx', 8)
       .attr('dy', '.35em');
 
-    // Update on each tick
     simulation.on('tick', () => {
       link
         .attr('x1', d => d.source.x)

@@ -7,6 +7,8 @@ export default function Visualize() {
   const [msg, setMsg] = useState('');
   const sRef = useRef(null);
   const rt = useRouter();
+
+  // Fetch the graph data from /preprocess
   useEffect(() => {
     async function fetchData() {
       setMsg('Loading graph data...');
@@ -32,9 +34,10 @@ export default function Visualize() {
     if (!gData) return;
 
     const svg = d3.select(sRef.current);
-    const width = 800, height = 600;
+    const width = 800;
+    const height = 600;
     svg.attr('width', width).attr('height', height).style('background', '#222');
-    svg.selectAll('*').remove();
+    svg.selectAll('*').remove(); // clear previous renders
 
     const simulation = d3.forceSimulation(gData.nodes)
       .force('link', d3.forceLink(gData.links).id(d => d.id).distance(80))
@@ -91,16 +94,16 @@ export default function Visualize() {
 
     function dragStart(event, d) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
-      d.fx = d.x; 
+      d.fx = d.x;
       d.fy = d.y;
     }
     function dragged(event, d) {
-      d.fx = event.x; 
+      d.fx = event.x;
       d.fy = event.y;
     }
     function dragEnd(event, d) {
       if (!event.active) simulation.alphaTarget(0);
-      d.fx = null; 
+      d.fx = null;
       d.fy = null;
     }
 
@@ -117,3 +120,7 @@ export default function Visualize() {
     </div>
   );
 }
+
+function dragStart() {}
+function dragged() {}
+function dragEnd() {}
